@@ -1,0 +1,71 @@
+{
+  "vpc_monitoring_dashboard": {
+    "dashboard_name": "VPC-Multi-Tier-Monitoring",
+    "description": "Monitoring dashboard for Production and Development VPC architecture",
+    "widgets": [
+      {
+        "type": "metric",
+        "title": "NAT Gateway Metrics",
+        "metrics": [
+          ["AWS/NatGateway", "PacketsDropCount", "NatGatewayId", "nat-gateway-id"],
+          ["AWS/NatGateway", "BytesInFromDestination", "NatGatewayId", "nat-gateway-id"],
+          ["AWS/NatGateway", "BytesOutToDestination", "NatGatewayId", "nat-gateway-id"]
+        ],
+        "period": 300,
+        "stat": "Average"
+      },
+      {
+        "type": "metric", 
+        "title": "EC2 Instance Health",
+        "metrics": [
+          ["AWS/EC2", "StatusCheckFailed", "InstanceId", "web-instance"],
+          ["AWS/EC2", "StatusCheckFailed", "InstanceId", "app1-instance"],
+          ["AWS/EC2", "StatusCheckFailed", "InstanceId", "db-instance"],
+          ["AWS/EC2", "StatusCheckFailed", "InstanceId", "dev-web-instance"],
+          ["AWS/EC2", "StatusCheckFailed", "InstanceId", "dev-db-instance"]
+        ],
+        "period": 300,
+        "stat": "Maximum"
+      },
+      {
+        "type": "metric",
+        "title": "Network Performance",
+        "metrics": [
+          ["AWS/EC2", "NetworkIn", "InstanceId", "web-instance"],
+          ["AWS/EC2", "NetworkOut", "InstanceId", "web-instance"],
+          ["AWS/EC2", "NetworkPacketsIn", "InstanceId", "app1-instance"],
+          ["AWS/EC2", "NetworkPacketsOut", "InstanceId", "app1-instance"]
+        ],
+        "period": 300,
+        "stat": "Average"
+      },
+      {
+        "type": "log",
+        "title": "VPC Flow Logs",
+        "query": "SOURCE '/aws/vpc/flowlogs' | fields @timestamp, srcaddr, dstaddr, srcport, dstport, protocol, action\n| filter action = \"REJECT\"\n| stats count() by srcaddr\n| sort count desc\n| limit 10",
+        "region": "us-east-1",
+        "view": "table"
+      }
+    ],
+    "alarms": [
+      {
+        "alarm_name": "NAT-Gateway-High-Error-Rate",
+        "metric_name": "ErrorPortAllocation",
+        "namespace": "AWS/NatGateway",
+        "statistic": "Sum",
+        "period": 300,
+        "threshold": 10,
+        "comparison_operator": "GreaterThanThreshold"
+      },
+      {
+        "alarm_name": "Instance-Status-Check-Failed",
+        "metric_name": "StatusCheckFailed",
+        "namespace": "AWS/EC2", 
+        "statistic": "Maximum",
+        "period": 300,
+        "threshold": 1,
+        "comparison_operator": "GreaterThanOrEqualToThreshold"
+      }
+    ]
+  }
+}

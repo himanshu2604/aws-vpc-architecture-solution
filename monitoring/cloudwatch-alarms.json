@@ -1,0 +1,116 @@
+{
+  "cloudwatch_alarms": {
+    "infrastructure_alarms": [
+      {
+        "alarm_name": "Production-NAT-Gateway-High-Errors",
+        "description": "Alert when NAT Gateway error rate is high",
+        "metric_name": "ErrorPortAllocation",
+        "namespace": "AWS/NatGateway",
+        "dimensions": {
+          "NatGatewayId": "NAT_GATEWAY_ID"
+        },
+        "statistic": "Sum",
+        "period": 300,
+        "evaluation_periods": 2,
+        "threshold": 10,
+        "comparison_operator": "GreaterThanThreshold",
+        "alarm_actions": ["arn:aws:sns:us-east-1:ACCOUNT_ID:vpc-alerts"]
+      },
+      {
+        "alarm_name": "VPC-Peering-Connection-Failed",
+        "description": "Monitor VPC peering connection health",
+        "metric_name": "VpcPeeringConnectionFailures",
+        "namespace": "AWS/VPC",
+        "statistic": "Sum",
+        "period": 300,
+        "evaluation_periods": 1,
+        "threshold": 1,
+        "comparison_operator": "GreaterThanOrEqualToThreshold",
+        "alarm_actions": ["arn:aws:sns:us-east-1:ACCOUNT_ID:vpc-alerts"]
+      }
+    ],
+    "instance_alarms": [
+      {
+        "alarm_name": "Web-Instance-Status-Check-Failed",
+        "description": "Web tier instance health check failure",
+        "metric_name": "StatusCheckFailed",
+        "namespace": "AWS/EC2",
+        "dimensions": {
+          "InstanceId": "web-instance-id"
+        },
+        "statistic": "Maximum",
+        "period": 300,
+        "evaluation_periods": 2,
+        "threshold": 1,
+        "comparison_operator": "GreaterThanOrEqualToThreshold",
+        "alarm_actions": ["arn:aws:sns:us-east-1:ACCOUNT_ID:instance-alerts"]
+      },
+      {
+        "alarm_name": "Database-Instance-High-CPU",
+        "description": "Database instance high CPU utilization",
+        "metric_name": "CPUUtilization",
+        "namespace": "AWS/EC2",
+        "dimensions": {
+          "InstanceId": "db-instance-id"
+        },
+        "statistic": "Average",
+        "period": 300,
+        "evaluation_periods": 3,
+        "threshold": 80,
+        "comparison_operator": "GreaterThanThreshold",
+        "alarm_actions": ["arn:aws:sns:us-east-1:ACCOUNT_ID:performance-alerts"]
+      }
+    ],
+    "network_alarms": [
+      {
+        "alarm_name": "Unusual-Network-Activity",
+        "description": "Detect unusual network traffic patterns",
+        "metric_name": "NetworkPacketsIn",
+        "namespace": "AWS/EC2",
+        "dimensions": {
+          "InstanceId": "web-instance-id"
+        },
+        "statistic": "Sum",
+        "period": 300,
+        "evaluation_periods": 2,
+        "threshold": 10000,
+        "comparison_operator": "GreaterThanThreshold",
+        "alarm_actions": ["arn:aws:sns:us-east-1:ACCOUNT_ID:security-alerts"]
+      },
+      {
+        "alarm_name": "High-Rejected-Traffic",
+        "description": "High number of rejected connections",
+        "metric_name": "RejectCount",
+        "namespace": "VPCFlowLogs",
+        "statistic": "Sum",
+        "period": 300,
+        "evaluation_periods": 2,
+        "threshold": 100,
+        "comparison_operator": "GreaterThanThreshold",
+        "alarm_actions": ["arn:aws:sns:us-east-1:ACCOUNT_ID:security-alerts"]
+      }
+    ],
+    "sns_topics": [
+      {
+        "topic_name": "vpc-alerts",
+        "display_name": "VPC Infrastructure Alerts",
+        "subscriptions": [
+          {
+            "protocol": "email",
+            "endpoint": "admin@company.com"
+          }
+        ]
+      },
+      {
+        "topic_name": "security-alerts",
+        "display_name": "VPC Security Alerts",
+        "subscriptions": [
+          {
+            "protocol": "email",
+            "endpoint": "security@company.com"
+          }
+        ]
+      }
+    ]
+  }
+}

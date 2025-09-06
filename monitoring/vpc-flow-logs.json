@@ -1,0 +1,59 @@
+{
+  "vpc_flow_logs_configuration": {
+    "production_vpc_flow_logs": {
+      "vpc_id": "Production-VPC",
+      "resource_type": "VPC",
+      "traffic_type": "ALL",
+      "log_destination_type": "cloud-watch-logs",
+      "log_group_name": "/aws/vpc/production-flowlogs",
+      "deliver_logs_permission_arn": "arn:aws:iam::ACCOUNT_ID:role/flowlogsRole",
+      "tags": {
+        "Name": "Production-VPC-FlowLogs",
+        "Environment": "Production"
+      }
+    },
+    "development_vpc_flow_logs": {
+      "vpc_id": "Development-VPC", 
+      "resource_type": "VPC",
+      "traffic_type": "ALL",
+      "log_destination_type": "cloud-watch-logs",
+      "log_group_name": "/aws/vpc/development-flowlogs",
+      "deliver_logs_permission_arn": "arn:aws:iam::ACCOUNT_ID:role/flowlogsRole",
+      "tags": {
+        "Name": "Development-VPC-FlowLogs",
+        "Environment": "Development"
+      }
+    },
+    "subnet_specific_monitoring": {
+      "web_subnet_flow_logs": {
+        "subnet_id": "web-subnet",
+        "traffic_type": "REJECT",
+        "log_group_name": "/aws/vpc/web-subnet-rejected",
+        "description": "Monitor rejected traffic to web tier"
+      },
+      "db_subnet_flow_logs": {
+        "subnet_id": "db-subnet",
+        "traffic_type": "ALL", 
+        "log_group_name": "/aws/vpc/db-subnet-all",
+        "description": "Monitor all traffic to database tier"
+      }
+    },
+    "log_format": "version account-id interface-id srcaddr dstaddr srcport dstport protocol packets bytes windowstart windowend action flowlogstatus",
+    "aggregation_interval": 60,
+    "retention_days": 14,
+    "common_queries": [
+      {
+        "name": "Top Rejected IPs",
+        "query": "fields @timestamp, srcaddr, dstaddr, srcport, dstport, protocol, action | filter action = \"REJECT\" | stats count() by srcaddr | sort count desc | limit 10"
+      },
+      {
+        "name": "VPC Peering Traffic",
+        "query": "fields @timestamp, srcaddr, dstaddr, protocol | filter (srcaddr like /^10\\.0\\./ and dstaddr like /^10\\.1\\./) or (srcaddr like /^10\\.1\\./ and dstaddr like /^10\\.0\\./)"
+      },
+      {
+        "name": "Database Access Patterns",
+        "query": "fields @timestamp, srcaddr, dstaddr, srcport, dstport | filter dstport = 3306 | stats count() by srcaddr | sort count desc"
+      }
+    ]
+  }
+}
