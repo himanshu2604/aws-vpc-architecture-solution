@@ -1,0 +1,87 @@
+{
+  "aws_vpc_cost_calculator": {
+    "region": "us-east-1",
+    "pricing_date": "2025-01-01",
+    "base_infrastructure": {
+      "vpc": 0.00,
+      "internet_gateway": 0.00,
+      "nat_gateway": 45.00,
+      "vpc_peering": 0.00
+    },
+    "instance_pricing": {
+      "t2.nano": 4.25,
+      "t2.micro": 7.30,
+      "t2.small": 14.60,
+      "t3.nano": 4.25,
+      "t3.micro": 7.30,
+      "t3.small": 14.60,
+      "t3.medium": 29.20,
+      "t3.large": 58.40
+    },
+    "discount_options": {
+      "on_demand": {
+        "multiplier": 1.0,
+        "description": "Standard hourly pricing"
+      },
+      "reserved_1year": {
+        "multiplier": 0.6,
+        "description": "1-year reserved instances"
+      },
+      "reserved_3year": {
+        "multiplier": 0.4,
+        "description": "3-year reserved instances"
+      },
+      "spot_instances": {
+        "multiplier": 0.3,
+        "description": "Spot pricing (variable)"
+      }
+    },
+    "current_deployment": {
+      "production": {
+        "instances": 5,
+        "instance_type": "t3.micro",
+        "monthly_cost": 36.50
+      },
+      "development": {
+        "instances": 2,
+        "instance_type": "t2.micro",
+        "monthly_cost": 14.60
+      },
+      "infrastructure": {
+        "nat_gateways": 1,
+        "monthly_cost": 45.00
+      },
+      "total_monthly": 96.10
+    },
+    "scaling_calculator": {
+      "instances_per_environment": {
+        "small": {
+          "prod_instances": 3,
+          "dev_instances": 1,
+          "monthly_cost": 65.80
+        },
+        "medium": {
+          "prod_instances": 5,
+          "dev_instances": 2,
+          "monthly_cost": 96.10
+        },
+        "large": {
+          "prod_instances": 10,
+          "dev_instances": 3,
+          "monthly_cost": 139.90
+        },
+        "enterprise": {
+          "prod_instances": 20,
+          "dev_instances": 5,
+          "monthly_cost": 227.50,
+          "additional_nat_gateways": 2,
+          "load_balancers": 2
+        }
+      }
+    },
+    "cost_formula": {
+      "total_monthly_cost": "infrastructure_cost + (instance_count × instance_price × discount_multiplier)",
+      "example": "45.00 + (7 × 7.30 × 1.0) = $96.10/month"
+    }
+  }
+}

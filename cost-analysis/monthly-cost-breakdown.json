@@ -1,0 +1,100 @@
+{
+  "vpc_cost_analysis": {
+    "summary": {
+      "total_monthly_cost": "$96.10",
+      "environment_breakdown": {
+        "production": "$81.50",
+        "development": "$14.60"
+      },
+      "cost_per_tier": {
+        "infrastructure": "$45.00",
+        "compute": "$51.10"
+      }
+    },
+    "detailed_costs": {
+      "networking": {
+        "vpc": {
+          "quantity": 2,
+          "unit_cost": "$0.00",
+          "monthly_cost": "$0.00",
+          "description": "VPCs are free in AWS"
+        },
+        "internet_gateway": {
+          "quantity": 2,
+          "unit_cost": "$0.00",
+          "monthly_cost": "$0.00",
+          "description": "Internet Gateways are free"
+        },
+        "nat_gateway": {
+          "quantity": 1,
+          "unit_cost": "$45.00",
+          "monthly_cost": "$45.00",
+          "description": "NAT Gateway in Production VPC only"
+        },
+        "vpc_peering": {
+          "quantity": 1,
+          "unit_cost": "$0.00",
+          "monthly_cost": "$0.00",
+          "description": "Same region peering is free"
+        }
+      },
+      "compute": {
+        "production_instances": {
+          "t3_micro": {
+            "quantity": 5,
+            "unit_cost": "$7.30",
+            "monthly_cost": "$36.50",
+            "instances": ["web", "app1", "app2", "dbcache", "db"]
+          }
+        },
+        "development_instances": {
+          "t2_micro": {
+            "quantity": 2,
+            "unit_cost": "$7.30",
+            "monthly_cost": "$14.60",
+            "instances": ["dev-web", "dev-db"]
+          }
+        }
+      },
+      "storage": {
+        "ebs_volumes": {
+          "quantity": 7,
+          "size_gb": 8,
+          "unit_cost": "$0.10",
+          "monthly_cost": "$5.60",
+          "description": "Default 8GB gp2 volumes per instance",
+          "note": "Not included in main total - varies by usage"
+        }
+      },
+      "data_transfer": {
+        "cross_az_transfer": {
+          "estimated_gb": 10,
+          "unit_cost": "$0.01",
+          "monthly_cost": "$0.10",
+          "description": "Cross-AZ data transfer",
+          "note": "Estimated - actual cost depends on usage"
+        },
+        "internet_transfer": {
+          "estimated_gb": 100,
+          "unit_cost": "$0.09",
+          "monthly_cost": "$9.00",
+          "description": "Internet data transfer out",
+          "note": "First 1GB free, then $0.09/GB"
+        }
+      }
+    },
+    "cost_optimization_features": [
+      "Single NAT Gateway shared across multiple subnets",
+      "No NAT Gateway in Development VPC",
+      "Right-sized instances (t2.micro for dev, t3.micro for prod)",
+      "VPC Peering instead of VPN for cross-environment connectivity",
+      "Multi-AZ deployment only where necessary"
+    ],
+    "potential_additional_costs": {
+      "elastic_load_balancer": "$16.20/month",
+      "rds_instead_of_ec2_db": "$15.00-50.00/month",
+      "cloudwatch_detailed_monitoring": "$2.10/month",
+      "backup_snapshots": "$1.00-5.00/month"
+    }
+  }
+}
