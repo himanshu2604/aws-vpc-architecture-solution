@@ -99,66 +99,31 @@
 ```
 aws-vpc-architecture-solution/
 ├── 📋 documentation/
-│   ├── AWS-VPC-Case-Study-Solution.md    # Complete implementation guide
-│   ├── architecture-overview.md          # Architecture deep dive
-│   ├── security-analysis.md             # Security implementation details
+│   ├── implementation-guide.md          # Complete setup guide
+│   ├── architecture-overview.md         # Architecture details
 │   └── network-diagram.png              # Visual architecture diagram
 ├── 🔧 configurations/
 │   ├── production-vpc/
-│   │   ├── vpc-config.json              # Production VPC configuration
+│   │   ├── vpc-config.json              # Production VPC settings
 │   │   ├── subnets-config.json          # 5 subnets configuration
-│   │   ├── route-tables.json            # Routing configuration
-│   │   ├── security-groups.json         # Production security groups
-│   │   └── nacls-config.json            # Network ACLs
+│   │   └── security-groups.json         # Security group rules
 │   ├── development-vpc/
-│   │   ├── vpc-config.json              # Development VPC configuration
+│   │   ├── vpc-config.json              # Development VPC settings
 │   │   ├── subnets-config.json          # 2 subnets configuration
-│   │   ├── route-tables.json            # Routing configuration
-│   │   └── security-groups.json         # Development security groups
-│   ├── peering/
-│   │   ├── peering-connection.json      # VPC peering configuration
-│   │   └── cross-vpc-routes.json        # Cross-VPC routing rules
-│   └── ec2-instances/
-│       ├── launch-templates.json        # Instance launch templates
-│       └── instance-configs.json        # Per-subnet instance configs
-├── 🚀 deployment-scripts/
-│   ├── gui-implementation/
-│   │   └── step-by-step-guide.md        # Detailed GUI instructions
-│   ├── automated-setup/
-│   │   ├── create-production-vpc.sh     # Production VPC automation
-│   │   ├── create-development-vpc.sh    # Development VPC automation
-│   │   ├── setup-peering.sh             # VPC peering automation
-│   │   └── launch-instances.sh          # EC2 instance deployment
-│   └── validation/
-│       ├── test-connectivity.sh         # Network connectivity tests
-│       ├── security-validation.py       # Security rules testing
-│       └── internet-access-check.sh     # Internet access validation
+│   │   └── security-groups.json         # Security group rules
+│   └── peering/
+│       └── peering-connection.json      # VPC peering setup
+├── 🚀 scripts/
+│   ├── setup-production-vpc.sh          # Production VPC automation
+│   ├── setup-development-vpc.sh         # Development VPC automation
+│   ├── setup-peering.sh                 # VPC peering automation
+│   └── test-connectivity.sh             # Network connectivity tests
 ├── 📸 screenshots/
 │   ├── vpc-overview/
-│   ├── subnet-configurations/
 │   ├── security-groups/
-│   ├── peering-connection/
-│   ├── instance-deployment/
 │   └── connectivity-tests/
-├── 🔒 security/
-│   ├── security-group-rules.md          # Detailed SG rules explanation
-│   ├── nacl-configurations.md           # NACL rules and best practices
-│   ├── network-segmentation.md          # Network isolation strategy
-│   └── compliance-checklist.md          # Security compliance validation
-├── 🧪 testing/
-│   ├── connectivity-tests/
-│   │   ├── internet-access-results.md   # Internet connectivity validation
-│   │   ├── cross-vpc-communication.md   # VPC peering test results
-│   │   └── security-boundary-tests.md   # Security isolation testing
-│   ├── performance-analysis/
-│   │   ├── network-latency-tests.json   # Cross-AZ latency measurements
-│   │   └── throughput-analysis.md       # Network performance metrics
-│   └── disaster-recovery/
-│       ├── failover-testing.md          # Multi-AZ failover tests
-│       └── backup-strategies.md         # Data protection approaches
-└── 📚 troubleshooting/
-    ├── common-issues.md                 # Frequently encountered problems
-    ├── debugging-guide.md               # Network troubleshooting steps
+└── 📚 docs/
+    ├── troubleshooting.md               # Common issues and solutions
     └── best-practices.md                # AWS VPC best practices
 ```
 
