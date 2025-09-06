@@ -58,7 +58,8 @@ While this case study demonstrates hands-on AWS Console implementation for learn
 2. **Database Communication**: Direct connectivity between DB subnets
 
 ## 🏗️ Architecture
-<img width="1417" height="795" alt="AWS VPC Multi-Tier Architecture Diagram" src="https://github.com/user-attachments/assets/vpc-architecture-diagram.png" />
+
+<img width="1525" height="1781" alt="diagram-export-9-6-2025-6_59_58-PM" src="https://github.com/user-attachments/assets/b441a1aa-24c6-4a64-b6ed-adbedc6e764e" />
 
 ## 🔧 Technologies & Services Used
 
