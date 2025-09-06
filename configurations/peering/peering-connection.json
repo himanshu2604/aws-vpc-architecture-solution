@@ -1,0 +1,46 @@
+{
+  "vpc_peering_connection": {
+    "name": "Production-Development-Peering",
+    "description": "VPC Peering connection between Production and Development environments for database connectivity",
+    "requester_vpc": {
+      "vpc_id": "Production-VPC",
+      "cidr_block": "10.0.0.0/16",
+      "region": "us-east-1",
+      "account_id": "same_account"
+    },
+    "accepter_vpc": {
+      "vpc_id": "Development-VPC",
+      "cidr_block": "10.1.0.0/16",
+      "region": "us-east-1",
+      "account_id": "same_account"
+    },
+    "options": {
+      "allow_remote_vpc_dns_resolution": true,
+      "allow_classic_link_to_remote_vpc": false,
+      "allow_vpc_to_remote_classic_link": false
+    },
+    "tags": {
+      "Name": "Production-Development-Peering",
+      "Environment": "Cross-Environment",
+      "Purpose": "Database-Connectivity",
+      "Project": "XYZ-Corporation-VPC-Architecture"
+    }
+  },
+  "peering_requirements": {
+    "cidr_overlap": "none",
+    "connectivity_scope": "database_subnets_only",
+    "allowed_traffic": [
+      {
+        "protocol": "TCP",
+        "port": 3306,
+        "description": "MySQL database connections"
+      }
+    ],
+    "security_considerations": [
+      "Restrict access to database subnets only",
+      "Use security groups to control access",
+      "Monitor cross-VPC traffic",
+      "Regular security audits"
+    ]
+  }
+}

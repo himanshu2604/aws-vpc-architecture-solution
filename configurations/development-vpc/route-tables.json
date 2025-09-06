@@ -1,0 +1,52 @@
+{
+  "route_tables": [
+    {
+      "name": "Development-Public-RT",
+      "type": "public",
+      "associated_subnets": ["dev-web"],
+      "routes": [
+        {
+          "destination": "0.0.0.0/0",
+          "target_type": "internet_gateway",
+          "target": "Development-IGW",
+          "description": "Internet access for development web tier"
+        },
+        {
+          "destination": "10.1.0.0/16",
+          "target_type": "local",
+          "target": "local",
+          "description": "Local VPC traffic"
+        }
+      ],
+      "tags": {
+        "Name": "Development-Public-RT",
+        "Type": "Public",
+        "Environment": "Development"
+      }
+    },
+    {
+      "name": "Development-Private-RT",
+      "type": "private_isolated",
+      "associated_subnets": ["dev-db"],
+      "routes": [
+        {
+          "destination": "10.1.0.0/16",
+          "target_type": "local",
+          "target": "local",
+          "description": "Local VPC traffic only"
+        },
+        {
+          "destination": "10.0.0.0/16",
+          "target_type": "vpc_peering_connection",
+          "target": "Production-Development-Peering",
+          "description": "VPC Peering to Production VPC"
+        }
+      ],
+      "tags": {
+        "Name": "Development-Private-RT",
+        "Type": "Private-Isolated",
+        "Environment": "Development"
+      }
+    }
+  ]
+}

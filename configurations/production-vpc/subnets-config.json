@@ -1,0 +1,79 @@
+{
+  "subnets": [
+    {
+      "name": "web",
+      "type": "public",
+      "tier": "Web Tier",
+      "cidr_block": "10.0.1.0/24",
+      "availability_zone": "us-east-1a",
+      "map_public_ip_on_launch": true,
+      "tags": {
+        "Name": "web",
+        "Type": "Public",
+        "Tier": "Web",
+        "Environment": "Production"
+      }
+    },
+    {
+      "name": "app1",
+      "type": "private",
+      "tier": "Application Tier 1",
+      "cidr_block": "10.0.2.0/24",
+      "availability_zone": "us-east-1a",
+      "map_public_ip_on_launch": false,
+      "internet_access": "via_nat_gateway",
+      "tags": {
+        "Name": "app1",
+        "Type": "Private",
+        "Tier": "Application-1",
+        "Environment": "Production"
+      }
+    },
+    {
+      "name": "app2",
+      "type": "private",
+      "tier": "Application Tier 2",
+      "cidr_block": "10.0.3.0/24",
+      "availability_zone": "us-east-1b",
+      "map_public_ip_on_launch": false,
+      "internet_access": "none",
+      "tags": {
+        "Name": "app2",
+        "Type": "Private",
+        "Tier": "Application-2",
+        "Environment": "Production"
+      }
+    },
+    {
+      "name": "dbcache",
+      "type": "private",
+      "tier": "Cache Tier",
+      "cidr_block": "10.0.4.0/24",
+      "availability_zone": "us-east-1a",
+      "map_public_ip_on_launch": false,
+      "internet_access": "via_nat_gateway",
+      "tags": {
+        "Name": "dbcache",
+        "Type": "Private",
+        "Tier": "Cache",
+        "Environment": "Production"
+      }
+    },
+    {
+      "name": "db",
+      "type": "private",
+      "tier": "Database Tier",
+      "cidr_block": "10.0.5.0/24",
+      "availability_zone": "us-east-1b",
+      "map_public_ip_on_launch": false,
+      "internet_access": "none",
+      "vpc_peering_access": true,
+      "tags": {
+        "Name": "db",
+        "Type": "Private",
+        "Tier": "Database",
+        "Environment": "Production"
+      }
+    }
+  ]
+}

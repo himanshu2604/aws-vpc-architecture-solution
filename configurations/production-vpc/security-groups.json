@@ -1,0 +1,156 @@
+{
+  "security_groups": [
+    {
+      "name": "Production-Web-SG",
+      "description": "Security group for Production Web Tier",
+      "vpc_id": "Production-VPC",
+      "inbound_rules": [
+        {
+          "protocol": "tcp",
+          "port_range": "80",
+          "source": "0.0.0.0/0",
+          "description": "HTTP access from internet"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "443",
+          "source": "0.0.0.0/0",
+          "description": "HTTPS access from internet"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "22",
+          "source": "YOUR_IP/32",
+          "description": "SSH access from admin IP"
+        }
+      ],
+      "outbound_rules": [
+        {
+          "protocol": "all",
+          "port_range": "all",
+          "destination": "0.0.0.0/0",
+          "description": "All outbound traffic"
+        }
+      ],
+      "tags": {
+        "Name": "Production-Web-SG",
+        "Tier": "Web",
+        "Environment": "Production"
+      }
+    },
+    {
+      "name": "Production-App-SG",
+      "description": "Security group for Production Application Tier",
+      "vpc_id": "Production-VPC",
+      "inbound_rules": [
+        {
+          "protocol": "tcp",
+          "port_range": "8080",
+          "source_security_group": "Production-Web-SG",
+          "description": "Application access from Web tier"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "22",
+          "source_security_group": "Production-Web-SG",
+          "description": "SSH access from Web tier"
+        }
+      ],
+      "outbound_rules": [
+        {
+          "protocol": "all",
+          "port_range": "all",
+          "destination": "0.0.0.0/0",
+          "description": "All outbound traffic"
+        }
+      ],
+      "tags": {
+        "Name": "Production-App-SG",
+        "Tier": "Application",
+        "Environment": "Production"
+      }
+    },
+    {
+      "name": "Production-Cache-SG",
+      "description": "Security group for Production Cache Tier",
+      "vpc_id": "Production-VPC",
+      "inbound_rules": [
+        {
+          "protocol": "tcp",
+          "port_range": "6379",
+          "source_security_group": "Production-App-SG",
+          "description": "Redis access from Application tier"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "11211",
+          "source_security_group": "Production-App-SG",
+          "description": "Memcached access from Application tier"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "22",
+          "source_security_group": "Production-Web-SG",
+          "description": "SSH access from Web tier"
+        }
+      ],
+      "outbound_rules": [
+        {
+          "protocol": "all",
+          "port_range": "all",
+          "destination": "0.0.0.0/0",
+          "description": "All outbound traffic"
+        }
+      ],
+      "tags": {
+        "Name": "Production-Cache-SG",
+        "Tier": "Cache",
+        "Environment": "Production"
+      }
+    },
+    {
+      "name": "Production-DB-SG",
+      "description": "Security group for Production Database Tier",
+      "vpc_id": "Production-VPC",
+      "inbound_rules": [
+        {
+          "protocol": "tcp",
+          "port_range": "3306",
+          "source_security_group": "Production-App-SG",
+          "description": "MySQL access from Application tier"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "3306",
+          "source_security_group": "Production-Cache-SG",
+          "description": "MySQL access from Cache tier"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "3306",
+          "source": "10.1.2.0/24",
+          "description": "MySQL access from Development DB subnet (VPC Peering)"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "22",
+          "source_security_group": "Production-Web-SG",
+          "description": "SSH access from Web tier"
+        }
+      ],
+      "outbound_rules": [
+        {
+          "protocol": "tcp",
+          "port_range": "3306",
+          "destination": "10.1.2.0/24",
+          "description": "MySQL access to Development DB subnet"
+        }
+      ],
+      "tags": {
+        "Name": "Production-DB-SG",
+        "Tier": "Database",
+        "Environment": "Production"
+      }
+    }
+  ]
+}

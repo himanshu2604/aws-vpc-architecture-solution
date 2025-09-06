@@ -1,0 +1,92 @@
+{
+  "security_groups": [
+    {
+      "name": "Dev-Web-SG",
+      "description": "Security group for Development Web Tier",
+      "vpc_id": "Development-VPC",
+      "inbound_rules": [
+        {
+          "protocol": "tcp",
+          "port_range": "80",
+          "source": "0.0.0.0/0",
+          "description": "HTTP access from internet"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "443",
+          "source": "0.0.0.0/0",
+          "description": "HTTPS access from internet"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "22",
+          "source": "YOUR_IP/32",
+          "description": "SSH access from admin IP"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "8080",
+          "source": "0.0.0.0/0",
+          "description": "Development server access"
+        }
+      ],
+      "outbound_rules": [
+        {
+          "protocol": "all",
+          "port_range": "all",
+          "destination": "0.0.0.0/0",
+          "description": "All outbound traffic"
+        }
+      ],
+      "tags": {
+        "Name": "Dev-Web-SG",
+        "Tier": "Web",
+        "Environment": "Development"
+      }
+    },
+    {
+      "name": "Dev-DB-SG",
+      "description": "Security group for Development Database Tier",
+      "vpc_id": "Development-VPC",
+      "inbound_rules": [
+        {
+          "protocol": "tcp",
+          "port_range": "3306",
+          "source_security_group": "Dev-Web-SG",
+          "description": "MySQL access from Development Web tier"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "3306",
+          "source": "10.0.5.0/24",
+          "description": "MySQL access from Production DB subnet (VPC Peering)"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "22",
+          "source_security_group": "Dev-Web-SG",
+          "description": "SSH access from Development Web tier"
+        }
+      ],
+      "outbound_rules": [
+        {
+          "protocol": "tcp",
+          "port_range": "3306",
+          "destination": "10.0.5.0/24",
+          "description": "MySQL access to Production DB subnet"
+        },
+        {
+          "protocol": "tcp",
+          "port_range": "1024-65535",
+          "destination": "10.1.1.0/24",
+          "description": "Return traffic to web tier"
+        }
+      ],
+      "tags": {
+        "Name": "Dev-DB-SG",
+        "Tier": "Database",
+        "Environment": "Development"
+      }
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "instance_configurations": {
+    "production_instances": [
+      {
+        "name": "web-instance",
+        "launch_template": "Production-Web-Template",
+        "vpc": "Production-VPC",
+        "subnet": "web",
+        "subnet_cidr": "10.0.1.0/24",
+        "availability_zone": "us-east-1a",
+        "instance_type": "t3.micro",
+        "public_ip": true,
+        "private_ip": "auto_assign",
+        "security_groups": ["Production-Web-SG"],
+        "tags": {
+          "Name": "web-instance",
+          "Environment": "Production",
+          "Tier": "Web",
+          "Subnet": "web"
+        }
+      },
+      {
+        "name": "app1-instance",
+        "launch_template": "Production-App-Template",
+        "vpc": "Production-VPC",
+        "subnet": "app1",
+        "subnet_cidr": "10.0.2.0/24",
+        "availability_zone": "us-east-1a",
+        "instance_type": "t3.micro",
+        "public_ip": false,
+        "private_ip": "auto_assign",
+        "security_groups": ["Production-App-SG"],
+        "internet_access": "via_nat_gateway",
+        "tags": {
+          "Name": "app1-instance",
+          "Environment": "Production",
+          "Tier": "Application-1",
+          "Subnet": "app1"
+        }
+      },
+      {
+        "name": "app2-instance",
+        "launch_template": "Production-App-Template",
+        "vpc": "Production-VPC",
+        "subnet": "app2",
+        "subnet_cidr": "10.0.3.0/24",
+        "availability_zone": "us-east-1b",
+        "instance_type": "t3.micro",
+        "public_ip": false,
+        "private_ip": "auto_assign",
+        "security_groups": ["Production-App-SG"],
+        "internet_access": "none",
+        "tags": {
+          "Name": "app2-instance",
+          "Environment": "Production",
+          "Tier": "Application-2",
+          "Subnet": "app2"
+        }
+      },
+      {
+        "name": "dbcache-instance",
+        "launch_template": "Production-Cache-Template",
+        "vpc": "Production-VPC",
+        "subnet": "dbcache",
+        "subnet_cidr": "10.0.4.0/24",
+        "availability_zone": "us-east-1a",
+        "instance_type": "t3.micro",
+        "public_ip": false,
+        "private_ip": "auto_assign",
+        "security_groups": ["Production-Cache-SG"],
+        "internet_access": "via_nat_gateway",
+        "tags": {
+          "Name": "dbcache-instance",
+          "Environment": "Production",
+          "Tier": "Cache",
+          "Subnet": "dbcache"
+        }
+      },
+      {
+        "name": "db-instance",
+        "launch_template": "Production-DB-Template",
+        "vpc": "Production-VPC",
+        "subnet": "db",
+        "subnet_cidr": "10.0.5.0/24",
+        "availability_zone": "us-east-1b",
+        "instance_type": "t3.micro",
+        "public_ip": false,
+        "private_ip": "auto_assign",
+        "security_groups": ["Production-DB-SG"],
+        "internet_access": "none",
+        "vpc_peering_access": true,
+        "tags": {
+          "Name": "db-instance",
+          "Environment": "Production",
+          "Tier": "Database",
+          "Subnet": "db"
+        }
+      }
+    ],
+    "development_instances": [
+      {
+        "name": "dev-web-instance",
+        "launch_template": "Development-Web-Template",
+        "vpc": "Development-VPC",
+        "subnet": "dev-web",
+        "subnet_cidr": "10.1.1.0/24",
+        "availability_zone": "us-east-1a",
+        "instance_type": "t2.micro",
+        "public_ip": true,
+        "private_ip": "auto_assign",
+        "security_groups": ["Dev-Web-SG"],
+        "tags": {
+          "Name": "dev-web-instance",
+          "Environment": "Development",
+          "Tier": "Web",
+          "Subnet": "dev-web"
+        }
+      },
+      {
+        "name": "dev-db-instance",
+        "launch_template": "Development-DB-Template",
+        "vpc": "Development-VPC",
+        "subnet": "dev-db",
+        "subnet_cidr": "10.1.2.0/24",
+        "availability_zone": "us-east-1b",
+        "instance_type": "t2.micro",
+        "public_ip": false,
+        "private_ip": "auto_assign",
+        "security_groups": ["Dev-DB-SG"],
+        "internet_access": "none",
+        "vpc_peering_access": true,
+        "tags": {
+          "Name": "dev-db-instance",
+          "Environment": "Development",
+          "Tier": "Database",
+          "Subnet": "dev-db"
+        }
+      }
+    ]
+  },
+  "deployment_summary": {
+    "total_instances": 7,
+    "production_instances": 5,
+    "development_instances": 2,
+    "public_instances": 2,
+    "private_instances": 5,
+    "instances_with_nat_access": 2,
+    "instances_with_vpc_peering": 2,
+    "cost_estimate": {
+      "production_monthly": "$36.50",
+      "development_monthly": "$14.60",
+      "total_monthly": "$51.10",
+      "instance_type_breakdown": {
+        "t3.micro": "5 instances @ $7.30/month each",
+        "t2.micro": "2 instances @ $7.30/month each"
+      }
+    }
+  }
+}

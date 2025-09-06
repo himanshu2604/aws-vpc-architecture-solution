@@ -1,0 +1,34 @@
+{
+  "vpc": {
+    "name": "Production-VPC",
+    "cidr_block": "10.0.0.0/16",
+    "enable_dns_support": true,
+    "enable_dns_hostnames": true,
+    "tenancy": "default",
+    "tags": {
+      "Name": "Production-VPC",
+      "Environment": "Production",
+      "Tier": "Multi-Tier",
+      "Project": "XYZ-Corporation-VPC-Architecture"
+    }
+  },
+  "internet_gateway": {
+    "name": "Production-IGW",
+    "tags": {
+      "Name": "Production-IGW",
+      "Environment": "Production",
+      "Purpose": "Internet-Access"
+    }
+  },
+  "nat_gateway": {
+    "name": "Production-NAT",
+    "subnet": "web",
+    "connectivity_type": "public",
+    "allocation_id": "allocate_new_eip",
+    "tags": {
+      "Name": "Production-NAT",
+      "Environment": "Production",
+      "Purpose": "Private-Subnet-Internet-Access"
+    }
+  }
+}

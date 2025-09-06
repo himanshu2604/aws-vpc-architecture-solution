@@ -1,0 +1,273 @@
+{
+  "network_acls": [
+    {
+      "name": "Production-Web-NACL",
+      "description": "Network ACL for Production Web Tier (Public Subnet)",
+      "vpc_id": "Production-VPC",
+      "associated_subnets": ["web"],
+      "inbound_rules": [
+        {
+          "rule_number": 100,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "80-80",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow HTTP from internet"
+        },
+        {
+          "rule_number": 110,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "443-443",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow HTTPS from internet"
+        },
+        {
+          "rule_number": 120,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "22-22",
+          "cidr_block": "YOUR_ADMIN_IP/32",
+          "description": "Allow SSH from admin IP"
+        },
+        {
+          "rule_number": 130,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "1024-65535",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow return traffic (ephemeral ports)"
+        }
+      ],
+      "outbound_rules": [
+        {
+          "rule_number": 100,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "80-80",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow HTTP to internet"
+        },
+        {
+          "rule_number": 110,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "443-443",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow HTTPS to internet"
+        },
+        {
+          "rule_number": 120,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "8080-8080",
+          "cidr_block": "10.0.2.0/24",
+          "description": "Allow traffic to app1 subnet"
+        },
+        {
+          "rule_number": 130,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "8080-8080",
+          "cidr_block": "10.0.3.0/24",
+          "description": "Allow traffic to app2 subnet"
+        },
+        {
+          "rule_number": 140,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "1024-65535",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow return traffic"
+        }
+      ],
+      "tags": {
+        "Name": "Production-Web-NACL",
+        "Tier": "Web",
+        "Environment": "Production"
+      }
+    },
+    {
+      "name": "Production-App-NACL",
+      "description": "Network ACL for Production Application Tier (Private Subnets)",
+      "vpc_id": "Production-VPC",
+      "associated_subnets": ["app1", "app2"],
+      "inbound_rules": [
+        {
+          "rule_number": 100,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "8080-8080",
+          "cidr_block": "10.0.1.0/24",
+          "description": "Allow traffic from web subnet"
+        },
+        {
+          "rule_number": 110,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "22-22",
+          "cidr_block": "10.0.1.0/24",
+          "description": "Allow SSH from web subnet"
+        },
+        {
+          "rule_number": 120,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "1024-65535",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow return traffic"
+        }
+      ],
+      "outbound_rules": [
+        {
+          "rule_number": 100,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "80-80",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow HTTP to internet (for app1 via NAT)"
+        },
+        {
+          "rule_number": 110,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "443-443",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow HTTPS to internet (for app1 via NAT)"
+        },
+        {
+          "rule_number": 120,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "3306-3306",
+          "cidr_block": "10.0.5.0/24",
+          "description": "Allow MySQL to DB subnet"
+        },
+        {
+          "rule_number": 130,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "6379-6379",
+          "cidr_block": "10.0.4.0/24",
+          "description": "Allow Redis to cache subnet"
+        },
+        {
+          "rule_number": 140,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "1024-65535",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow return traffic"
+        }
+      ],
+      "tags": {
+        "Name": "Production-App-NACL",
+        "Tier": "Application",
+        "Environment": "Production"
+      }
+    },
+    {
+      "name": "Production-Data-NACL",
+      "description": "Network ACL for Production Cache and Database Tier",
+      "vpc_id": "Production-VPC",
+      "associated_subnets": ["dbcache", "db"],
+      "inbound_rules": [
+        {
+          "rule_number": 100,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "3306-3306",
+          "cidr_block": "10.0.2.0/24",
+          "description": "Allow MySQL from app1 subnet"
+        },
+        {
+          "rule_number": 110,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "3306-3306",
+          "cidr_block": "10.0.3.0/24",
+          "description": "Allow MySQL from app2 subnet"
+        },
+        {
+          "rule_number": 120,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "6379-6379",
+          "cidr_block": "10.0.2.0/24",
+          "description": "Allow Redis from app1 subnet"
+        },
+        {
+          "rule_number": 130,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "6379-6379",
+          "cidr_block": "10.0.3.0/24",
+          "description": "Allow Redis from app2 subnet"
+        },
+        {
+          "rule_number": 140,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "3306-3306",
+          "cidr_block": "10.1.2.0/24",
+          "description": "Allow MySQL from Development DB (VPC Peering)"
+        },
+        {
+          "rule_number": 150,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "22-22",
+          "cidr_block": "10.0.1.0/24",
+          "description": "Allow SSH from web subnet"
+        },
+        {
+          "rule_number": 160,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "1024-65535",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow return traffic"
+        }
+      ],
+      "outbound_rules": [
+        {
+          "rule_number": 100,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "80-80",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow HTTP to internet (for dbcache via NAT)"
+        },
+        {
+          "rule_number": 110,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "443-443",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow HTTPS to internet (for dbcache via NAT)"
+        },
+        {
+          "rule_number": 120,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "3306-3306",
+          "cidr_block": "10.1.2.0/24",
+          "description": "Allow MySQL to Development DB (VPC Peering)"
+        },
+        {
+          "rule_number": 130,
+          "protocol": "tcp",
+          "rule_action": "allow",
+          "port_range": "1024-65535",
+          "cidr_block": "0.0.0.0/0",
+          "description": "Allow return traffic"
+        }
+      ],
+      "tags": {
+        "Name": "Production-Data-NACL",
+        "Tier": "Data",
+        "Environment": "Production"
+      }
+    }
+  ]
+}

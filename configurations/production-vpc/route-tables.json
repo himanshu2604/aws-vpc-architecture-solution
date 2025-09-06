@@ -1,0 +1,76 @@
+{
+  "route_tables": [
+    {
+      "name": "Production-Public-RT",
+      "type": "public",
+      "associated_subnets": ["web"],
+      "routes": [
+        {
+          "destination": "0.0.0.0/0",
+          "target_type": "internet_gateway",
+          "target": "Production-IGW",
+          "description": "Internet access for public subnet"
+        },
+        {
+          "destination": "10.0.0.0/16",
+          "target_type": "local",
+          "target": "local",
+          "description": "Local VPC traffic"
+        }
+      ],
+      "tags": {
+        "Name": "Production-Public-RT",
+        "Type": "Public",
+        "Environment": "Production"
+      }
+    },
+    {
+      "name": "Production-Private-NAT-RT",
+      "type": "private_with_nat",
+      "associated_subnets": ["app1", "dbcache"],
+      "routes": [
+        {
+          "destination": "0.0.0.0/0",
+          "target_type": "nat_gateway",
+          "target": "Production-NAT",
+          "description": "Internet access via NAT Gateway"
+        },
+        {
+          "destination": "10.0.0.0/16",
+          "target_type": "local",
+          "target": "local",
+          "description": "Local VPC traffic"
+        }
+      ],
+      "tags": {
+        "Name": "Production-Private-NAT-RT",
+        "Type": "Private-With-NAT",
+        "Environment": "Production"
+      }
+    },
+    {
+      "name": "Production-Private-Isolated-RT",
+      "type": "private_isolated",
+      "associated_subnets": ["app2", "db"],
+      "routes": [
+        {
+          "destination": "10.0.0.0/16",
+          "target_type": "local",
+          "target": "local",
+          "description": "Local VPC traffic only"
+        },
+        {
+          "destination": "10.1.0.0/16",
+          "target_type": "vpc_peering_connection",
+          "target": "Production-Development-Peering",
+          "description": "VPC Peering to Development VPC"
+        }
+      ],
+      "tags": {
+        "Name": "Production-Private-Isolated-RT",
+        "Type": "Private-Isolated",
+        "Environment": "Production"
+      }
+    }
+  ]
+}

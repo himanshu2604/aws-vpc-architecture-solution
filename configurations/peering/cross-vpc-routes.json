@@ -1,0 +1,98 @@
+{
+  "cross_vpc_routing": {
+    "peering_connection": "Production-Development-Peering",
+    "description": "Routing configuration for cross-VPC database connectivity",
+    "production_vpc_routes": {
+      "route_table": "Production-Private-Isolated-RT",
+      "affected_subnets": ["app2", "db"],
+      "new_routes": [
+        {
+          "destination_cidr": "10.1.0.0/16",
+          "target": "Production-Development-Peering",
+          "target_type": "vpc_peering_connection",
+          "description": "Route to Development VPC"
+        },
+        {
+          "destination_cidr": "10.1.2.0/24",
+          "target": "Production-Development-Peering",
+          "target_type": "vpc_peering_connection",
+          "description": "Specific route to Development DB subnet"
+        }
+      ]
+    },
+    "development_vpc_routes": {
+      "route_table": "Development-Private-RT",
+      "affected_subnets": ["dev-db"],
+      "new_routes": [
+        {
+          "destination_cidr": "10.0.0.0/16",
+          "target": "Production-Development-Peering",
+          "target_type": "vpc_peering_connection",
+          "description": "Route to Production VPC"
+        },
+        {
+          "destination_cidr": "10.0.5.0/24",
+          "target": "Production-Development-Peering",
+          "target_type": "vpc_peering_connection",
+          "description": "Specific route to Production DB subnet"
+        }
+      ]
+    }
+  },
+  "traffic_flow_validation": {
+    "expected_connectivity": [
+      {
+        "source": "Production DB subnet (10.0.5.0/24)",
+        "destination": "Development DB subnet (10.1.2.0/24)",
+        "protocol": "TCP",
+        "port": 3306,
+        "status": "allowed"
+      },
+      {
+        "source": "Development DB subnet (10.1.2.0/24)",
+        "destination": "Production DB subnet (10.0.5.0/24)",
+        "protocol": "TCP",
+        "port": 3306,
+        "status": "allowed"
+      }
+    ],
+    "restricted_connectivity": [
+      {
+        "source": "Production Web subnet (10.0.1.0/24)",
+        "destination": "Development VPC (10.1.0.0/16)",
+        "status": "blocked",
+        "reason": "No route configured"
+      },
+      {
+        "source": "Development Web subnet (10.1.1.0/24)",
+        "destination": "Production VPC (10.0.0.0/16)",
+        "status": "blocked",
+        "reason": "No route configured"
+      }
+    ]
+  },
+  "testing_commands": {
+    "connectivity_tests": [
+      {
+        "description": "Test Production to Development DB connectivity",
+        "command": "ping 10.1.2.10",
+        "execution_location": "Production DB instance"
+      },
+      {
+        "description": "Test Development to Production DB connectivity",
+        "command": "ping 10.0.5.10",
+        "execution_location": "Development DB instance"
+      },
+      {
+        "description": "Test MySQL connection from Production to Development",
+        "command": "mysql -h 10.1.2.10 -u dbuser -p testdb",
+        "execution_location": "Production DB instance"
+      },
+      {
+        "description": "Test MySQL connection from Development to Production",
+        "command": "mysql -h 10.0.5.10 -u dbuser -p testdb",
+        "execution_location": "Development DB instance"
+      }
+    ]
+  }
+}

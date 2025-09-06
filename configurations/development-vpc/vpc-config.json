@@ -1,0 +1,27 @@
+{
+  "vpc": {
+    "name": "Development-VPC",
+    "cidr_block": "10.1.0.0/16",
+    "enable_dns_support": true,
+    "enable_dns_hostnames": true,
+    "tenancy": "default",
+    "tags": {
+      "Name": "Development-VPC",
+      "Environment": "Development",
+      "Tier": "Two-Tier",
+      "Project": "XYZ-Corporation-VPC-Architecture"
+    }
+  },
+  "internet_gateway": {
+    "name": "Development-IGW",
+    "tags": {
+      "Name": "Development-IGW",
+      "Environment": "Development",
+      "Purpose": "Internet-Access"
+    }
+  },
+  "nat_gateway": {
+    "required": false,
+    "reason": "Development environment - only web subnet needs internet access"
+  }
+}
