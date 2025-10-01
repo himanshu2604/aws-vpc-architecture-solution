@@ -18,7 +18,7 @@
 - ✅ **Enterprise Security** - Multi-layered security groups and NACLs
 - ✅ **Cost-Effective Design** - Optimized NAT Gateway usage
 
-## 🔗 Infrastructure as Code Collection
+## 🔗 Infrastructure as Code Collection [Pending]
 
 > **📋 Complete Automation Scripts**: [GitHub Gists Collection](https://gist.github.com/himanshu2604/vpc-automation-collection)
 
